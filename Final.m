@@ -7,11 +7,14 @@ Ba = 4.32e-3;
 B = 0.003;
 J = 4.321e-4; %Equivalent inertia
 Rg = 1.6e-4;
-
+potentiometer = 1;
 
 s = tf('s');
-t1 = Kt/(Ra*Ja*s + Ba*s + Kt*Kb*s);
-t2 = Kt/(Ra*Ja*s^2 + Ba*s - Kt*Kb*s);
-t3 = 1/(J*s + B);
+t1 = Kt/(Ra*Ja*s + Ba*Ra + Kt*Kb);
+t2 = Ra/(Ra*Ja*s + Ba*Ra - Kt*Kb);
+t3 = Rg/(J*s^2 + B*s);
+%exp(-t*s) Time Delay
+sys =(t1*exp(-0.65*s))*t3;
+sys_clo = feedback(C*sys,1); % C is The value of PID 
 
-sys = (t1-t2)*t3
+
